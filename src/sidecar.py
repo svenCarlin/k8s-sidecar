@@ -15,6 +15,7 @@ from resources import list_resources, watch_for_changes
 METHOD = "METHOD"
 UNIQUE_FILENAMES = "UNIQUE_FILENAMES"
 SKIP_TLS_VERIFY = "SKIP_TLS_VERIFY"
+KUBE_SKIP_TLS_VERIFY = "KUBE_SKIP_TLS_VERIFY"
 FOLDER = "FOLDER"
 FOLDER_ANNOTATION = "FOLDER_ANNOTATION"
 LABEL = "LABEL"
@@ -134,7 +135,11 @@ def _initialize_kubeclient_configuration():
         logger.info("Loading incluster config ...")
         config.load_incluster_config()
 
-    if os.getenv(SKIP_TLS_VERIFY) == "true":
+    skipVerify = os.getenv(KUBE_SKIP_TLS_VERIFY)
+    if skipVerify is None:
+        skipVerify = os.getenv(SKIP_TLS_VERIFY)
+
+    if skipVerify == "true":
         configuration = client.Configuration.get_default_copy()
         configuration.verify_ssl = False
         configuration.debug = False
