@@ -124,9 +124,9 @@ def request(url, method, enable_5xx=False, payload=None):
 
     # If method is not provided use GET as default
     if method == "GET" or not method:
-        res = r.get("%s" % url, auth=auth, timeout=REQ_TIMEOUT, verify=REQ_SKIP_TLS_VERIFY)
+        res = r.get("%s" % url, auth=auth, timeout=REQ_TIMEOUT, verify=not REQ_SKIP_TLS_VERIFY)
     elif method == "POST":
-        res = r.post("%s" % url, auth=auth, json=payload, timeout=REQ_TIMEOUT, verify=REQ_SKIP_TLS_VERIFY)
+        res = r.post("%s" % url, auth=auth, json=payload, timeout=REQ_TIMEOUT, verify=not REQ_SKIP_TLS_VERIFY)
     else:
         logger.warning(f"Invalid REQ_METHOD: '{method}', please use 'GET' or 'POST'. Doing nothing.")
         return
